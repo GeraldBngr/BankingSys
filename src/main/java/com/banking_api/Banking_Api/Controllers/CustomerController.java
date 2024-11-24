@@ -38,6 +38,7 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
+        System.out.println("Check");
         return ResponseEntity.ok("Customer with ID " + id + " has been deleted.");
     }
 

@@ -49,10 +49,10 @@ public class AccountService {
                 .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
 
         account.setBalance(account.getBalance() + amount); // Update balance
-        return accountRepository.save(account); // Save changes
+        return accountRepository.save(account);
     }
 
-    // Withdraw money from an account
+
     public Account withdraw(Long accountId, Double amount) {
         if (amount <= 0) {
             throw new RuntimeException("Withdrawal amount must be greater than zero.");
@@ -64,7 +64,8 @@ public class AccountService {
             throw new RuntimeException("Insufficient funds.");
         }
 
-        account.setBalance(account.getBalance() - amount); // Deduct balance
+        account.setBalance(account.getBalance() - amount);
+        System.out.println("ok");//
         return accountRepository.save(account); // Save changes
     }
 
