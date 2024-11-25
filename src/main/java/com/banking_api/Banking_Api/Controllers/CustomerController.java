@@ -1,5 +1,6 @@
 package com.banking_api.Banking_Api.Controllers;
 
+import com.banking_api.Banking_Api.Dtos.CustomerDTO;
 import com.banking_api.Banking_Api.Entities.Customer;
 import com.banking_api.Banking_Api.Services.CustomerService;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ public class CustomerController {
 
     // GET /customers - Fetch all customers
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
     // GET /customers/{id} - Fetch a specific customer by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
     // POST /customers - Add a new customer

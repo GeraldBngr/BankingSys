@@ -1,10 +1,13 @@
 package com.banking_api.Banking_Api.Services;
 
+import com.banking_api.Banking_Api.Dtos.AccountSummaryDTO;
+import com.banking_api.Banking_Api.Dtos.CustomerDTO;
 import com.banking_api.Banking_Api.Entities.Customer;
 import com.banking_api.Banking_Api.Repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -15,15 +18,31 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    // Fetch all customers
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerDTO> getAllCustomers() {
+        return customerRepository.findAll().stream()
+                .map(customer -> new CustomerDTO(
+                        customer.getId(),
+                        customer.getName(),
+                        customer.getEmail(),
+                        customer.getAccounts().stream()
+                                .map(account -> new AccountSummaryDTO(account.getId(), account.getBalance()))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
     }
 
-    // Fetch a specific customer by ID
-    public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id)
+    public CustomerDTO getCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + id));
+
+        return new CustomerDTO(
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail(),
+                customer.getAccounts().stream()
+                        .map(account -> new AccountSummaryDTO(account.getId(), account.getBalance()))
+                        .collect(Collectors.toList())
+        );
     }
     // Add a new customer
     public Customer addCustomer(Customer customer) {
