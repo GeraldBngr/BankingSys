@@ -2,8 +2,10 @@ package com.banking_api.Banking_Api.Controllers;
 
 
 
+import com.banking_api.Banking_Api.Dtos.TransactionDTO;
 import com.banking_api.Banking_Api.Entities.Account;
 import com.banking_api.Banking_Api.Services.AccountService;
+import com.banking_api.Banking_Api.Services.TransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +16,11 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
+    private final TransactionService transactionService;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, TransactionService transactionService) {
         this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     // GET /accounts - Fetch all accounts
@@ -58,5 +62,10 @@ public class AccountController {
     public ResponseEntity<Account> withdraw(@PathVariable Long id, @RequestParam Double amount) {
         Account updatedAccount = accountService.withdraw(id, amount);
         return ResponseEntity.ok(updatedAccount);
+    }
+    // GET /accounts/{id}/transactions
+    @GetMapping("/{id}/transactions")
+    public ResponseEntity<List<TransactionDTO>> getTransactionsByAccountId(@PathVariable Long id) {
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id));
     }
 }
